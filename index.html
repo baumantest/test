@@ -19,7 +19,7 @@
             font-size: 36px;
             margin-bottom: 20px;
         }
-        input[type="date"] {
+        input[type="date"], select {
             font-size: 18px;
             padding: 10px 15px;
             border: none;
@@ -43,6 +43,13 @@
             font-size: 24px;
             margin-top: 20px;
         }
+        #status {
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
         /* Стили для мобильных устройств */
         @media (max-width: 600px) {
             body {
@@ -53,39 +60,64 @@
 </head>
 <body>
     <div class="container">
-        <h1>Выберите дату</h1>
-        <input type="date" id="dateInput" onchange="addYear()"><br><br>
+        <h1>Выберите дату и группу здоровья</h1>
+        <input type="date" id="dateInput"><br><br>
+        <select id="healthGroup">
+            <option value="Основная">Основная</option>
+            <option value="Специальная">Специальная</option>
+        </select><br><br>
+        <button onclick="addYear()">Рассчитать</button>
         <p id="output"></p>
+        <p id="status"></p>
     </div>
 
     <script>
-        function addYear() {
-            var dateInput = document.getElementById("dateInput").value;
+         function addYear() {
+             var dateInput = document.getElementById("dateInput").value;
 
-            // Создание объекта Date с использованием метода split()
-            var dateParts = dateInput.split("-");
-            var year = parseInt(dateParts[0]);
-            var monthIndex = parseInt(dateParts[1]) - 1; // Месяцы начинаются с нуля
-            var day = parseInt(dateParts[2]);
-            var date = new Date(year, monthIndex, day);
+             // Создание объекта Date с использованием метода split()
+             var dateParts = dateInput.split("-");
+             var year = parseInt(dateParts[0]);
+             var monthIndex = parseInt(dateParts[1]) - 1; // Месяцы начинаются с нуля
+             var day = parseInt(dateParts[2]);
+             var date = new Date(year, monthIndex, day);
 
-            date.setFullYear(date.getFullYear() + 1);
+             // Получение выбранной группы здоровья
+             var healthGroup = document.getElementById("healthGroup").value;
 
-            // Форматирование даты
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            var formattedDate = day + "." + month + "." + year;
+             // Прибавление времени в зависимости от выбранной группы здоровья
+             if (healthGroup === "Основная") {
+                 date.setFullYear(date.getFullYear() + 1);
+             } else if (healthGroup === "Специальная") {
+                 date.setMonth(date.getMonth() + 6);
+             }
 
-            // Вычисление количества дней между датами
-            var currentDate = new Date();
-            var timeDiff = date.getTime() - currentDate.getTime();
-            var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+             // Форматирование даты
+             var day = date.getDate();
+             var month = date.getMonth() + 1;
+             var year = date.getFullYear();
+             var formattedDate = day + "." + month + "." + year;
 
-            var output = document.getElementById("output");
-            
-             // Использование метода textContent для вывода сообщения
-             output.textContent = "Ваш паспорт действует до " + formattedDate + " (" + daysDiff + " дней)";
+             // Вычисление количества дней между датами
+             var currentDate = new Date();
+             var timeDiff = date.getTime() - currentDate.getTime();
+             var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+             var output = document.getElementById("output");
+             output.innerHTML = "Ваш паспорт действует до " + formattedDate + " (" + daysDiff + " дней)";
+
+             // Вывод сообщения о статусе паспорта
+             var status = document.getElementById("status");
+             if (daysDiff <= 0) {
+                 status.innerHTML = "Паспорт просрочен";
+                 status.style.backgroundColor = "red";
+             } else if (daysDiff > 0 && daysDiff <= 14) {
+                 status.innerHTML = "Паспорт скоро пора обновлять";
+                 status.style.backgroundColor = "orange";
+             } else {
+                 status.innerHTML = "Паспорт действителен";
+                 status.style.backgroundColor = "green";
+             }
         }
     </script>
 </body>

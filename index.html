@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Выбор даты</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <style>
+        body {
+            background-color: #1C2331;
+            color: #B2BABB;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        input[type="date"] {
+            font-size: 18px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background-color: #3E8E41;
+        }
+        #output {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        /* Стили для мобильных устройств */
+        @media (max-width: 600px) {
+            body {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Выберите дату</h1>
+        <input type="date" id="dateInput" onchange="addYear()"><br><br>
+        <p id="output"></p>
+    </div>
+
+    <script>
+        function addYear() {
+            var dateInput = document.getElementById("dateInput").value;
+
+            // Создание объекта Date с использованием метода split()
+            var dateParts = dateInput.split("-");
+            var year = parseInt(dateParts[0]);
+            var monthIndex = parseInt(dateParts[1]) - 1; // Месяцы начинаются с нуля
+            var day = parseInt(dateParts[2]);
+            var date = new Date(year, monthIndex, day);
+
+            date.setFullYear(date.getFullYear() + 1);
+
+            // Форматирование даты
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var formattedDate = day + "." + month + "." + year;
+
+            // Вычисление количества дней между датами
+            var currentDate = new Date();
+            var timeDiff = date.getTime() - currentDate.getTime();
+            var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            var output = document.getElementById("output");
+            
+             // Использование метода textContent для вывода сообщения
+             output.textContent = "Ваш паспорт действует до " + formattedDate + " (" + daysDiff + " дней)";
+        }
+    </script>
+</body>
+</html>

@@ -16,7 +16,7 @@
             text-align: center;
         }
         h1 {
-            font-size: 36px;
+            font-size: 30px;
             margin-bottom: 20px;
         }
         input[type="date"], select {
@@ -39,6 +39,9 @@
         button:hover {
             background-color: #3E8E41;
         }
+        a {
+            color: #B2BABB;
+        }
         #output {
             font-size: 24px;
             margin-top: 20px;
@@ -56,11 +59,21 @@
                 font-size: 18px;
             }
         }
+        #description {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        #author {
+            font-size: 14px;
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Выберите дату и группу здоровья</h1>
+        <p id="description">Здесь можно узнать, пора ли становиться в очередь в поликлинике😀<br><br></p>
+        <h1>Укажите дату получения ПЗ<br>и группу здоровья</h1>
         <input type="date" id="dateInput"><br><br>
         <select id="healthGroup">
             <option value="Основная">Основная</option>
@@ -69,6 +82,10 @@
         <button onclick="addYear()">Рассчитать</button>
         <p id="output"></p>
         <p id="status"></p>
+        <p id="output"></p>
+        <p id="status"></p>
+        <p id="link"></p>
+        <p id="author">Автор идеи:<br>Умаров Мурад Мухамедович<br>Доцент кафедры «Физическое воспитание» ФОФ МГТУ им. Н. Э. Баумана<br><br>Группа Мурада Мухамедовича в telegram:<br><a href='https://t.me/umarovbmstu'>Умаров МГТУ спорт</a><br><br>По вопросам или предложениям писать в telegram разработчику:<br><a href='https://t.me/goodtimecharli'>@goodtimecharli</a></p>
     </div>
 
     <script>
@@ -87,9 +104,9 @@
 
              // Прибавление времени в зависимости от выбранной группы здоровья
              if (healthGroup === "Основная") {
-                 date.setFullYear(date.getFullYear() + 1.5);
+             date.setMonth(date.getMonth() + 18);
              } else if (healthGroup === "Специальная") {
-                 date.setMonth(date.getMonth() + 12);
+             date.setFullYear(date.getFullYear() + 1);
              }
 
              // Форматирование даты
@@ -104,19 +121,23 @@
              var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
              var output = document.getElementById("output");
-             output.innerHTML = "Ваш паспорт действует до " + formattedDate + " (" + daysDiff + " дней)";
+             output.innerHTML = "Ваш паспорт действует до " + formattedDate + " (" + daysDiff + " д.)";
 
              // Вывод сообщения о статусе паспорта
              var status = document.getElementById("status");
+             var link = document.getElementById("link");
              if (daysDiff <= 0) {
                  status.innerHTML = "Паспорт просрочен";
                  status.style.backgroundColor = "red";
+                 link.innerHTML = "Узнать, как продлить паспорт здоровья можно по <a href='http://health.bmstu.ru/students/'>ссылке</a>";
              } else if (daysDiff > 0 && daysDiff <= 14) {
                  status.innerHTML = "Паспорт скоро пора обновлять";
                  status.style.backgroundColor = "orange";
+                 link.innerHTML = "Узнать, как продлить паспорт здоровья можно по <a href='http://health.bmstu.ru/students/'>ссылке</a>";
              } else {
                  status.innerHTML = "Паспорт действителен";
                  status.style.backgroundColor = "green";
+                 link.innerHTML = "";
              }
         }
     </script>
